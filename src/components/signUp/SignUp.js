@@ -166,7 +166,7 @@ const Signup = () =>{
         postData(data).then(r => reset());
     };
 
-    const OnChangeChandler = (e) =>{
+    const onChangeChandler = (e) =>{
         const {name,value} = e.currentTarget;
         setValue(name, value,{shouldValidate:true});
     }
@@ -189,9 +189,10 @@ const Signup = () =>{
                 <FormInput
                     aria-invalid={errors?.firstName ? "true" : "false"}
                     type="text"
+                    id='firstName'
                     value={getValues().firstName}
                     name="firstName"
-                    onChange={OnChangeChandler}
+                    onChange={onChangeChandler}
                 />
                 {errors?.firstName && <ErrorMessage>{errors?.firstName.message}</ErrorMessage>}
             </div>
@@ -201,8 +202,10 @@ const Signup = () =>{
                 <FormInput
                     type="text"
                     name="lastName"
+                    id="lastName"
+                    data-testid="test-lastName"
                     value={getValues().lastName}
-                    onChange={OnChangeChandler}
+                    onChange={onChangeChandler}
                 />
                 {errors?.lastName && <ErrorMessage>{errors?.lastName.message}</ErrorMessage>}
             </div>
@@ -211,8 +214,10 @@ const Signup = () =>{
                 <FormLabel htmlFor="email">Email</FormLabel>
                 <FormInput type="text"
                            name="email"
+                           id="email"
+                           data-test-id="test-email"
                            value={getValues().email}
-                           onChange={OnChangeChandler}
+                           onChange={onChangeChandler}
                 />
                 {errors?.email && <ErrorMessage>{errors?.email.message}</ErrorMessage>}
             </div>
@@ -222,16 +227,19 @@ const Signup = () =>{
                 <FormInput
                     type="password"
                     name="password"
+                    id="password"
+                    data-test-id="test-password"
                     value={getValues().password}
-                    onChange={OnChangeChandler}
+                    onChange={onChangeChandler}
                 />
                 {errors?.password && <ErrorMessage>{errors?.password.message}</ErrorMessage>}
             </div>
 
-            <SubmitButton type="submit" />
+            <SubmitButton type="submit" name="submit"/>
         </SignupForm>
 
-    );
+    )
 }
+
 
 export default Signup;
