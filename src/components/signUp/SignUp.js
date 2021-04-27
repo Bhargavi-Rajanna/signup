@@ -105,11 +105,9 @@ const Signup = () =>{
                 let first_name = firstName?.toString().toLowerCase(),
                     last_name = lastName?.toString().toLowerCase(),
                     password = value.toString().toLowerCase();
-                if (password.includes(first_name)) {
-                    return "Password contains your first name. Password should not contain your first or last name";
-                } else if (password.includes(last_name)) {
-                    return "Password contains your last name. Password should not contain your first or last name"
-                }
+                if (password.includes(first_name) || password.includes(last_name)) {
+                   return "Password should not contain your first or last name";
+                 }
             }
             return (
                 passwordRegex.every((pattern) =>
@@ -143,7 +141,7 @@ const Signup = () =>{
                 },
                 pattern: {
                     value:getRegex('email'),
-                    message:'Enter valid email'
+                    message:'Enter a valid email'
                 }
             }
         },
@@ -152,6 +150,10 @@ const Signup = () =>{
                 required: {
                     value:true,
                     message: 'Password is required'
+                },
+                minLength:{
+                    value:8,
+                    message : "Password should be of minimum 8 characters"
                 },
                 validate: (value) => {
                     return passwordValidation(value)
