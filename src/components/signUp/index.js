@@ -1,8 +1,12 @@
 
 import { useForm } from "react-hook-form";
 import {useEffect} from "react";
-import axios from 'axios';
 import styled from "styled-components";
+
+//utils functions
+import {getRegex} from "../../utils/getRegex";
+import {postData} from "../../utils/postData";
+
 
 const SignupForm = styled.form`
   max-width: 500px;
@@ -91,8 +95,31 @@ const Signup = () =>{
             password: ''
         },
     });
-
     const {errors}= formState;
+
+    const passwordValidation = ( value) => {
+        let passwordRegex = getRegex('password')
+        const {firstName, lastName} = getValues();
+        if(value){
+            if(firstName || lastName) {
+                let first_name = firstName?.toString().toLowerCase(),
+                    last_name = lastName?.toString().toLowerCase(),
+                    password = value.toString().toLowerCase();
+                if (password.includes(first_name)) {
+                    return "Password contains your first name. Password should not contain your first or last name";
+                } else if (password.includes(last_name)) {
+                    return "Password contains your last name. Password should not contain your first or last name"
+                }
+            }
+            return (
+                passwordRegex.every((pattern) =>
+                    pattern.test(value)
+                ) || "Password must include lower and upper case character"
+            );
+        }
+
+    }
+
     const fields = [
         { name:'firstName',
             rules:{
@@ -114,6 +141,10 @@ const Signup = () =>{
                     value:true,
                     message: 'Email is required',
                 },
+                pattern: {
+                    value:getRegex('email'),
+                    message:'Enter valid email'
+                }
             }
         },
         { name:'password',
@@ -122,6 +153,9 @@ const Signup = () =>{
                     value:true,
                     message: 'Password is required'
                 },
+                validate: (value) => {
+                    return passwordValidation(value)
+                }
             },
 
         },
@@ -129,9 +163,7 @@ const Signup = () =>{
     ]
 
     const onSubmit = (data) => {
-        console.log("onSubmit Data",data);
-        console.log("erros", errors)
-
+        postData(data).then(r => reset());
     };
 
     const OnChangeChandler = (e) =>{
